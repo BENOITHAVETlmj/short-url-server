@@ -59,7 +59,7 @@ router.post("/create/url", async (req, res) => {
   }
 });
 
-async function redirectOnUrl(req, res) {
+router.get("/:url",(req, res) => {
   try {
     const shortenUrl = req.params.url;
     const getUrl = await Url.findOne({ shortUrl: shortenUrl });
@@ -71,6 +71,6 @@ async function redirectOnUrl(req, res) {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-}
+});
 
 module.exports = router;

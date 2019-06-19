@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const connect = () => {
   mongoose.connect(
-    "mongodb://localhost/short-url-BENOIT-HAVET",
+    process.env.MONGODB_URI || "mongodb://localhost/short-url-BENOIT-HAVET",
     {
       useNewUrlParser: true
     },

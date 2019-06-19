@@ -59,7 +59,7 @@ router.post("/create/url", async (req, res) => {
   }
 });
 
-router.get("/:url",(req, res) => {
+router.get("/:url", async (req, res) => {
   try {
     const shortenUrl = req.params.url;
     const getUrl = await Url.findOne({ shortUrl: shortenUrl });

@@ -18,17 +18,14 @@ router.get("/", async (req, res) => {
 router.post("/create/url", async (req, res) => {
   // console.log(req.body.originalUrl);
   //Verifier si l'Url est valide
+  console.log(validUrl.isUri(req.body.originalUrl));
+
   try {
     if (validUrl.isUri(req.body.originalUrl)) {
       //L'adresse existe t'elle déjà?
       const urlExists = await Url.findOne({
         originalUrl: req.body.originalUrl
       });
-      if (req.body.originalUrl === null) {
-        res.status(400).json({
-          message: "Please enter some text!"
-        });
-      }
 
       if (urlExists) {
         res.status(406).json({
@@ -53,7 +50,7 @@ router.post("/create/url", async (req, res) => {
         return res.status(201).json(newUrl);
       }
     } else {
-      return res.status(401).json("This URL is not valid!");
+      return res.status(401).json("This URL is not a valid URL!");
     }
   } catch (error) {
     res.status(400).json({
@@ -61,5 +58,19 @@ router.post("/create/url", async (req, res) => {
     });
   }
 });
+
+async function redirectOnUrl(req, res) {
+  try {
+    const shortenUrl = req.params.url;
+    const getUrl = await Url.findOne({ shortUrl: shortenUrl });
+    const originalUrl = getUrl.originalUrl;
+
+    getUrl.visits += 1;
+    await getUrl.save();
+    return res.redirect(originalUrl);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
 
 module.exports = router;

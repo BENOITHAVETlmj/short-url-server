@@ -9,6 +9,6 @@ setUpMiddlewares(app);
 const url = require("./src/api/url/routes");
 app.use(url);
 
-app.listen(3001, () => {
+app.listen(process.env.PORT || 3001, () => {
   console.log("Server started");
 });
